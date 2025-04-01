@@ -1,0 +1,2 @@
+recursive-include tutorsaleor/patches *
+recursive-include tutorsaleor/templates *
