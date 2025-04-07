@@ -17,6 +17,18 @@ hooks.Filters.CONFIG_DEFAULTS.add_items(
         # Each new setting is a pair: (setting_name, default_value).
         # Prefix your setting names with 'SALEOR_'.
         ("SALEOR_VERSION", __version__),
+        ("RUN_SALEOR_DASHBOARD", True),
+        ("RUN_SALEOR_STOREFRONT", True),
+        ("SALEOR_DASHBOARD_IMAGE", "ghcr.io/saleor/saleor-dashboard:3.20.34"),
+        ("SALEOR_STOREFRONT_IMAGE", "edunext/saleor-storefront:3.20.34"),
+        ("SALEOR_CORE_HOST", "saleor-api.{{ LMS_HOST }}"),
+        ("SALEOR_DASHBOARD_HOST", "saleor-dashboard.{{ LMS_HOST }}"),
+        ("SALEOR_STOREFRONT_HOST", "saleor-storefront.{{ LMS_HOST }}"),
+        ("SALEOR_CORE_PORT", "18000"),
+        ("SALEOR_DASHBOARD_PORT", "18010"),
+        ("SALEOR_STOREFRONT_PORT", "18020"),
+        ("SALEOR_STOREFRONT_BRANCH", "main"),
+        ("SALEOR_STOREFRONT_REPOSITORY", "https://github.com/saleor/storefront"),
     ]
 )
 
@@ -83,12 +95,12 @@ hooks.Filters.IMAGES_BUILD.add_items(
         # To build `myimage` with `tutor images build myimage`,
         # you would add a Dockerfile to templates/saleor/build/myimage,
         # and then write:
-        ### (
-        ###     "myimage",
-        ###     ("plugins", "saleor", "build", "myimage"),
-        ###     "docker.io/myimage:{{ SALEOR_VERSION }}",
-        ###     (),
-        ### ),
+        (
+            "storefront",
+            ("plugins", "saleor", "build", "storefront"),
+            "{{ SALEOR_STOREFRONT_IMAGE }}",
+            (),
+        ),
     ]
 )
 

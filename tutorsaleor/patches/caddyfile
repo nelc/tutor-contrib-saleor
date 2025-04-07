@@ -1,0 +1,12 @@
+{% if RUN_SALEOR_DASHBOARD %}
+# Saleor Dashboard
+{{ SALEOR_DASHBOARD_HOST }}{$default_site_port} {
+    import proxy "saleor-dashboard:{{SALEOR_DASHBOARD_PORT}}"
+}
+{% endif %}
+{% if RUN_SALEOR_STOREFRONT %}
+# Saleor Storefront
+{{ SALEOR_STOREFRONT_HOST }}{$default_site_port} {
+    import proxy "saleor-storefront:{{SALEOR_STOREFRONT_PORT}}"
+}
+{% endif %}
