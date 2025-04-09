@@ -51,8 +51,8 @@ saleor-db:
     - {{ SALEOR_DB_PORT }}:5432
   restart: unless-stopped
   volumes:
-    - ./../data/saleor_psql:/var/lib/postgresql/data
-    - ./../data/saleor_psql_replica/replica_user.sql:/docker-entrypoint-initdb.d/replica_user.sql
+    - ./../../data/saleor/postgresql:/var/lib/postgresql/data
+      - ./../../data/saleor/postgresql_replica/replica_user.sql:/docker-entrypoint-initdb.d/replica_user.sql
   environment:
     - POSTGRES_USER={{ SALEOR_DB_USER }}
     - POSTGRES_PASSWORD={{ SALEOR_DB_PASSWORD }}
