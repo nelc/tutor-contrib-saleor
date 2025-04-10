@@ -21,3 +21,39 @@ saleor-storefront:
     tty: true
     restart: unless-stopped
 {% endif %}
+
+{% if RUN_SALEOR_CORE %}
+saleor-core:
+  image: {{ SALEOR_CORE_DOCKER_IMAGE }}
+  ports:
+  - {{ SALEOR_CORE_PORT }}:8000
+  restart: unless-stopped
+  stdin_open: true
+  tty: true
+  depends_on:
+  - saleor-db
+  - redis
+  environment:
+  - DASHBOARD_URL={{ SALEOR_DASHBOARD_HOST }}
+  - ALLOWED_HOSTS=localhost,api,{{ SALEOR_CORE_HOST }}
+  - DEFAULT_CHANNEL_SLUG=default-channel
+  - HTTP_IP_FILTER_ALLOW_LOOPBACK_IPS=True
+  - HTTP_IP_FILTER_ENABLED=True
+  - CELERY_BROKER_URL=redis://{{ REDIS_HOST }}:{{ REDIS_PORT }}/{{ SALEOR_REDIS_DB }}
+  - DATABASE_URL=postgres://{{ SALEOR_DB_USER }}:{{ SALEOR_DB_PASSWORD  }}@saleor-db/saleor
+  - DEFAULT_FROM_EMAIL=noreply@example.com
+  - EMAIL_URL=smtp://mailpit:1025
+  - SECRET_KEY=changeme
+
+saleor-db:
+  image: {{ SALEOR_DB_DOCKER_IMAGE }}
+  ports:
+    - {{ SALEOR_DB_PORT }}:5432
+  restart: unless-stopped
+  volumes:
+    - ./../../data/saleor/postgresql:/var/lib/postgresql/data
+      - ./../../data/saleor/postgresql_replica/replica_user.sql:/docker-entrypoint-initdb.d/replica_user.sql
+  environment:
+    - POSTGRES_USER={{ SALEOR_DB_USER }}
+    - POSTGRES_PASSWORD={{ SALEOR_DB_PASSWORD }}
+{% endif %}

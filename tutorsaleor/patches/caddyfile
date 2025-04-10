@@ -8,5 +8,10 @@
 # Saleor Storefront
 {{ SALEOR_STOREFRONT_HOST }}{$default_site_port} {
     import proxy "saleor-storefront:{{SALEOR_STOREFRONT_PORT}}"
+{% if RUN_SALEOR_CORE %}
+{% endif %}
+# Saleor CORE
+{{ SALEOR_CORE_HOST }}{$default_site_port} {
+    import proxy "saleor-core:{{SALEOR_CORE_PORT}}"
 }
 {% endif %}
