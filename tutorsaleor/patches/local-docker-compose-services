@@ -57,3 +57,13 @@ saleor-db:
     - POSTGRES_USER={{ SALEOR_DB_USER }}
     - POSTGRES_PASSWORD={{ SALEOR_DB_PASSWORD }}
 {% endif %}
+
+{% if RUN_SALEOR_APP_STRIPE %}
+saleor-app-stripe:
+    image: {{ SALEOR_APP_STRIPE_IMAGE }}
+    ports:
+      - "{{ SALEOR_APP_STRIPE_PORT }}:3000"
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+{% endif %}
