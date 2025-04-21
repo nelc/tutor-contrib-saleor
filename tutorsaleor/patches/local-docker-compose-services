@@ -56,6 +56,7 @@ saleor-core:
     - ./../../data/saleor/media:/app/media
   extra_hosts:
     - "{{ SALEOR_STRIPE_HOST }}:host-gateway"
+    - "{{ SALEOR_DUMMY_HOST }}:host-gateway"
 
 saleor-worker:
   image: {{ SALEOR_CORE_DOCKER_IMAGE }}
@@ -82,6 +83,7 @@ saleor-worker:
     - ./../../data/saleor/media:/app/media
   extra_hosts:
     - "{{ SALEOR_STRIPE_HOST }}:host-gateway"
+    - "{{ SALEOR_DUMMY_HOST }}:host-gateway"
 
 saleor-db:
   image: {{ SALEOR_DB_DOCKER_IMAGE }}
@@ -101,6 +103,17 @@ saleor-app-stripe:
   image: {{ SALEOR_APP_STRIPE_IMAGE }}
   ports:
     - "{{ SALEOR_APP_STRIPE_PORT }}:3000"
+  stdin_open: true
+  tty: true
+  restart: unless-stopped
+  extra_hosts:
+    - "{{ SALEOR_CORE_HOST }}:host-gateway"
+{% endif %}
+{% if RUN_SALEOR_APP_DUMMY %}
+saleor-app-dummy:
+  image: {{ SALEOR_APP_DUMMY_IMAGE }}
+  ports:
+    - "{{ SALEOR_APP_DUMMY_PORT }}:3000"
   stdin_open: true
   tty: true
   restart: unless-stopped
