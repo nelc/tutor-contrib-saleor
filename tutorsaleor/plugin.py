@@ -26,6 +26,7 @@ hooks.Filters.CONFIG_DEFAULTS.add_items(
         ("SALEOR_STOREFRONT_IMAGE", "edunext/saleor-storefront:3.20.34"),
         ("SALEOR_DASHBOARD_HOST", "saleor-dashboard.{{ LMS_HOST }}"),
         ("SALEOR_STOREFRONT_HOST", "saleor-storefront.{{ LMS_HOST }}"),
+        ("SALEOR_STRIPE_HOST", "saleor-stripe.{{ LMS_HOST }}"),
         ("SALEOR_DASHBOARD_PORT", "18010"),
         ("SALEOR_STOREFRONT_PORT", "18020"),
         ("SALEOR_STOREFRONT_BRANCH", "main"),

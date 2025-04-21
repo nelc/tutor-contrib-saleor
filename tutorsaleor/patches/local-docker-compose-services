@@ -38,7 +38,7 @@ saleor-core:
   - ALLOWED_HOSTS=localhost,api,{{ SALEOR_CORE_HOST }}
   - DEFAULT_CHANNEL_SLUG=default-channel
   - HTTP_IP_FILTER_ALLOW_LOOPBACK_IPS=True
-  - HTTP_IP_FILTER_ENABLED=True
+  - HTTP_IP_FILTER_ENABLED=False
   - CELERY_BROKER_URL=redis://{{ REDIS_HOST }}:{{ REDIS_PORT }}/{{ SALEOR_REDIS_DB }}
   - DATABASE_URL=postgres://{{ SALEOR_DB_USER }}:{{ SALEOR_DB_PASSWORD  }}@saleor-db/saleor
   - DEFAULT_FROM_EMAIL=noreply@example.com
@@ -47,6 +47,8 @@ saleor-core:
   - PUBLIC_URL=http://{{ SALEOR_CORE_HOST }}:{{ SALEOR_CORE_PORT }}
   volumes:
     - ./../../data/saleor/media:/app/media
+  extra_hosts:
+    - "{{ SALEOR_STRIPE_HOST }}:host-gateway"
 
 saleor-worker:
   image: {{ SALEOR_CORE_DOCKER_IMAGE }}
@@ -62,7 +64,7 @@ saleor-worker:
   - ALLOWED_HOSTS=localhost,api,{{ SALEOR_CORE_HOST }}
   - DEFAULT_CHANNEL_SLUG=default-channel
   - HTTP_IP_FILTER_ALLOW_LOOPBACK_IPS=True
-  - HTTP_IP_FILTER_ENABLED=True
+  - HTTP_IP_FILTER_ENABLED=False
   - CELERY_BROKER_URL=redis://{{ REDIS_HOST }}:{{ REDIS_PORT }}/{{ SALEOR_REDIS_DB }}
   - DATABASE_URL=postgres://{{ SALEOR_DB_USER }}:{{ SALEOR_DB_PASSWORD  }}@saleor-db/saleor
   - DEFAULT_FROM_EMAIL=noreply@example.com
@@ -71,6 +73,8 @@ saleor-worker:
   - PUBLIC_URL=http://{{ SALEOR_CORE_HOST }}:{{ SALEOR_CORE_PORT }}
   volumes:
     - ./../../data/saleor/media:/app/media
+  extra_hosts:
+    - "{{ SALEOR_STRIPE_HOST }}:host-gateway"
 
 saleor-db:
   image: {{ SALEOR_DB_DOCKER_IMAGE }}
@@ -93,4 +97,6 @@ saleor-app-stripe:
   stdin_open: true
   tty: true
   restart: unless-stopped
+  extra_hosts:
+    - "{{ SALEOR_CORE_HOST }}:host-gateway"
 {% endif %}
