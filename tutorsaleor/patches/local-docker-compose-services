@@ -45,6 +45,8 @@ saleor-core:
   - EMAIL_URL=smtp://mailpit:1025
   - SECRET_KEY=changeme
   - PUBLIC_URL=http://{{ SALEOR_CORE_HOST }}:{{ SALEOR_CORE_PORT }}
+  volumes:
+    - ./../../data/saleor/media:/app/media
 
 saleor-worker:
   image: {{ SALEOR_CORE_DOCKER_IMAGE }}
@@ -67,6 +69,8 @@ saleor-worker:
   - EMAIL_URL=smtp://mailpit:1025
   - SECRET_KEY=changeme
   - PUBLIC_URL=http://{{ SALEOR_CORE_HOST }}:{{ SALEOR_CORE_PORT }}
+  volumes:
+    - ./../../data/saleor/media:/app/media
 
 saleor-db:
   image: {{ SALEOR_DB_DOCKER_IMAGE }}
@@ -83,10 +87,10 @@ saleor-db:
 
 {% if RUN_SALEOR_APP_STRIPE %}
 saleor-app-stripe:
-    image: {{ SALEOR_APP_STRIPE_IMAGE }}
-    ports:
-      - "{{ SALEOR_APP_STRIPE_PORT }}:3000"
-    stdin_open: true
-    tty: true
-    restart: unless-stopped
+  image: {{ SALEOR_APP_STRIPE_IMAGE }}
+  ports:
+    - "{{ SALEOR_APP_STRIPE_PORT }}:3000"
+  stdin_open: true
+  tty: true
+  restart: unless-stopped
 {% endif %}
