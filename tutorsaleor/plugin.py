@@ -1,7 +1,6 @@
 import os
 from glob import glob
 
-import click
 import importlib_resources
 from tutor import hooks
 
@@ -17,25 +16,25 @@ hooks.Filters.CONFIG_DEFAULTS.add_items(
         # Each new setting is a pair: (setting_name, default_value).
         # Prefix your setting names with 'SALEOR_'.
         ("SALEOR_VERSION", __version__),
+        ("RUN_SALEOR_CORE", True),
         ("RUN_SALEOR_DASHBOARD", True),
         ("RUN_SALEOR_STOREFRONT", True),
-        ("SALEOR_DASHBOARD_IMAGE", "ghcr.io/saleor/saleor-dashboard:3.20.34"),
-        ("SALEOR_STOREFRONT_IMAGE", "edunext/saleor-storefront:3.20.34"),
         ("SALEOR_DASHBOARD_HOST", "saleor-dashboard.{{ LMS_HOST }}"),
-        ("SALEOR_STOREFRONT_HOST", "saleor-storefront.{{ LMS_HOST }}"),
+        ("SALEOR_DASHBOARD_IMAGE", "ghcr.io/saleor/saleor-dashboard:3.20.34"),
         ("SALEOR_DASHBOARD_PORT", "18010"),
-        ("SALEOR_STOREFRONT_PORT", "18020"),
-        ("SALEOR_STOREFRONT_BRANCH", "main"),
-        ("SALEOR_STOREFRONT_REPOSITORY", "https://github.com/saleor/storefront"),
-        ("SALEOR_CORE_HOST", "saleor-core.{{ LMS_HOST }}"),
-        ("SALEOR_CORE_DOCKER_IMAGE", "ghcr.io/saleor/saleor:3.20"),
-        ("SALEOR_CORE_PORT", "18000"),
         ("SALEOR_DB_DOCKER_IMAGE", "library/postgres:15-alpine"),
         ("SALEOR_DB_PASSWORD", "saleor"),
         ("SALEOR_DB_PORT", "5432"),
         ("SALEOR_DB_USER", "saleor"),
+        ("SALEOR_CORE_HOST", "saleor-core.{{ LMS_HOST }}"),
+        ("SALEOR_CORE_DOCKER_IMAGE", "ghcr.io/saleor/saleor:3.20"),
+        ("SALEOR_CORE_PORT", "18000"),
         ("SALEOR_REDIS_DB", "9"),
-        ("RUN_SALEOR_CORE", True),
+        ("SALEOR_STOREFRONT_BRANCH", "main"),
+        ("SALEOR_STOREFRONT_HOST", "saleor-storefront.{{ LMS_HOST }}"),
+        ("SALEOR_STOREFRONT_IMAGE", "ednxops/tests-nelp:openedx-saleor-storefront.1.0.0"),
+        ("SALEOR_STOREFRONT_PORT", "18020"),
+        ("SALEOR_STOREFRONT_REPOSITORY", "https://github.com/nelc/saleor-openedx-storefront"),
     ]
 )
 
