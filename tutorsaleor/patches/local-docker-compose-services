@@ -14,14 +14,11 @@ saleor-dashboard:
 {% if RUN_SALEOR_STOREFRONT %}
 saleor-storefront:
   extra_hosts:
-    - "saleor-core.local.overhang.io:host-gateway"
+    - "{{ SALEOR_CORE_HOST }}:host-gateway"
   image: {{ SALEOR_STOREFRONT_IMAGE }}
-  environment:
-    NEXT_PUBLIC_SALEOR_API_URL: "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ SALEOR_CORE_HOST }}:{{ SALEOR_CORE_PORT }}/graphql/"
-    NEXT_PUBLIC_STOREFRONT_URL: "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ SALEOR_STOREFRONT_HOST }}:{{ SALEOR_STOREFRONT_PORT }}/"
   ports:
     - "{{ SALEOR_STOREFRONT_PORT }}:3000"
-  command: ["pnpm", "dev"]
+  command: ["npm", "start"]
   stdin_open: true
   tty: true
   restart: unless-stopped
