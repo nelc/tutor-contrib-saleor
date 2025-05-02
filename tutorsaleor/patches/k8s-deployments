@@ -1,0 +1,174 @@
+{% if RUN_SALEOR_DASHBOARD %}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saleor-dashboard
+  labels:
+    app.kubernetes.io/name: saleor-dashboard
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: saleor-dashboard
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: saleor-dashboard
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: saleor-dashboard
+          image: {{ SALEOR_DASHBOARD_IMAGE }}
+          ports:
+            - containerPort: 80
+          env:
+            - name: API_URL
+              value: "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ SALEOR_CORE_HOST }}/graphql/"
+            - name: APP_MOUNT_URI
+              value: "/dashboard/"
+{% endif %}
+{% if RUN_SALEOR_CORE %}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saleor-core-worker
+  labels:
+    app.kubernetes.io/name: saleor-core-worker
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: saleor-core-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: saleor-core-worker
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: saleor-core-worker
+          args:
+            - celery
+            - -A
+            - saleor
+            - --app=saleor.celeryconf:app worker
+            - --loglevel=info
+            - -B
+          image: {{ SALEOR_CORE_DOCKER_IMAGE }}
+          ports:
+            - containerPort: 8000
+          env:
+            - name: API_URL
+              value: "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ SALEOR_CORE_HOST }}/graphql/"
+            - name: APP_MOUNT_URI
+              value: "/dashboard/"
+            - name: DASHBOARD_URL
+              value: {{ SALEOR_DASHBOARD_HOST }}
+            - name: ALLOWED_HOSTS
+              value: localhost,api,{{ SALEOR_CORE_HOST }}, saleor-core
+            - name: DEFAULT_CHANNEL_SLUG
+              value: default-channel
+            - name: HTTP_IP_FILTER_ALLOW_LOOPBACK_IPS
+              value: "True"
+            - name: HTTP_IP_FILTER_ENABLED
+              value: "False"
+            - name: CELERY_BROKER_URL
+              value: redis://{{ REDIS_HOST }}:{{ REDIS_PORT }}/{{ SALEOR_REDIS_DB }}
+            - name: DATABASE_URL
+              value: postgres://{{ SALEOR_DB_USER }}:{{ SALEOR_DB_PASSWORD  }}@{{ SALEOR_DB_URL }}/saleor
+            - name: DEFAULT_FROM_EMAIL
+              value: noreply@example.com
+            - name: EMAIL_URL
+              value: smtp://mailpit:1025
+            - name: SECRET_KEY
+              value: changeme
+            - name: PUBLIC_URL
+              value: {% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ SALEOR_CORE_HOST }}
+            - name: RSA_PRIVATE_KEY
+              value: |-
+                {{ JWT_RSA_PRIVATE_KEY | indent(6) }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saleor-core
+  labels:
+    app.kubernetes.io/name: saleor-core
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: saleor-core
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: saleor-core
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: saleor-core
+          image: {{ SALEOR_CORE_DOCKER_IMAGE }}
+          ports:
+            - containerPort: 8000
+          env:
+            - name: API_URL
+              value: "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ SALEOR_CORE_HOST }}/graphql/"
+            - name: APP_MOUNT_URI
+              value: "/dashboard/"
+            - name: DASHBOARD_URL
+              value: {{ SALEOR_DASHBOARD_HOST }}
+            - name: ALLOWED_HOSTS
+              value: localhost,api,{{ SALEOR_CORE_HOST }}, saleor-core
+            - name: DEFAULT_CHANNEL_SLUG
+              value: default-channel
+            - name: HTTP_IP_FILTER_ALLOW_LOOPBACK_IPS
+              value: "True"
+            - name: HTTP_IP_FILTER_ENABLED
+              value: "False"
+            - name: CELERY_BROKER_URL
+              value: redis://{{ REDIS_HOST }}:{{ REDIS_PORT }}/{{ SALEOR_REDIS_DB }}
+            - name: DATABASE_URL
+              value: postgres://{{ SALEOR_DB_USER }}:{{ SALEOR_DB_PASSWORD  }}@{{ SALEOR_DB_URL }}/saleor
+            - name: DEFAULT_FROM_EMAIL
+              value: noreply@example.com
+            - name: EMAIL_URL
+              value: smtp://mailpit:1025
+            - name: SECRET_KEY
+              value: changeme
+            - name: PUBLIC_URL
+              value: {% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ SALEOR_CORE_HOST }}
+            - name: RSA_PRIVATE_KEY
+              value: |-
+                {{ JWT_RSA_PRIVATE_KEY | indent(6) }}
+{% endif %}
+{% if RUN_SALEOR_STOREFRONT %}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saleor-storefront
+  labels:
+    app.kubernetes.io/name: saleor-storefront
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: saleor-storefront
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: saleor-storefront
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: saleor-storefront
+          image: {{ SALEOR_STOREFRONT_IMAGE }}
+          ports:
+            - containerPort: 3000
+{% endif %}
