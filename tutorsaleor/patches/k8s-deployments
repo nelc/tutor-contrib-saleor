@@ -15,9 +15,6 @@ spec:
       labels:
         app.kubernetes.io/name: saleor-dashboard
     spec:
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
       containers:
         - name: saleor-dashboard
           image: {{ SALEOR_DASHBOARD_IMAGE }}
@@ -46,18 +43,15 @@ spec:
       labels:
         app.kubernetes.io/name: saleor-core-worker
     spec:
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
       containers:
         - name: saleor-core-worker
           args:
-            - celery
-            - -A
-            - saleor
-            - --app=saleor.celeryconf:app worker
-            - --loglevel=info
-            - -B
+            - "celery"
+            - "-A"
+            - "saleor"
+            - "--app=saleor.celeryconf:app worker"
+            - "--loglevel=info"
+            - "-B"
           image: {{ SALEOR_CORE_DOCKER_IMAGE }}
           ports:
             - containerPort: 8000
@@ -107,9 +101,6 @@ spec:
       labels:
         app.kubernetes.io/name: saleor-core
     spec:
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
       containers:
         - name: saleor-core
           image: {{ SALEOR_CORE_DOCKER_IMAGE }}
@@ -163,9 +154,6 @@ spec:
       labels:
         app.kubernetes.io/name: saleor-storefront
     spec:
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
       containers:
         - name: saleor-storefront
           image: {{ SALEOR_STOREFRONT_IMAGE }}
