@@ -158,6 +158,9 @@ spec:
       containers:
         - name: saleor-storefront
           image: {{ SALEOR_STOREFRONT_IMAGE }}
+          args:
+            - "npm"
+            - "start"
           ports:
             - containerPort: 3000
           env:
