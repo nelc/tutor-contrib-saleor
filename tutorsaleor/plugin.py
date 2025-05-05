@@ -33,7 +33,7 @@ hooks.Filters.CONFIG_DEFAULTS.add_items(
         ("SALEOR_REDIS_DB", "9"),
         ("SALEOR_STOREFRONT_BRANCH", "test/saleor_integration"),
         ("SALEOR_STOREFRONT_HOST", "saleor-storefront.{{ LMS_HOST }}"),
-        ("SALEOR_STOREFRONT_IMAGE", "ednxops/tests-nelp:openedx-saleor-storefront.1.0.0"),
+        ("SALEOR_STOREFRONT_IMAGE", "ednxops/tests-nelp:openedx-saleor-storefront.1.0.1"),
         ("SALEOR_STOREFRONT_PORT", "18020"),
         ("SALEOR_STOREFRONT_REPOSITORY", "https://github.com/nelc/saleor-openedx-storefront"),
     ]
