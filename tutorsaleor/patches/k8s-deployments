@@ -162,7 +162,7 @@ spec:
             - containerPort: 3000
           env:
             - name: API_URL
-              value: "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ SALEOR_CORE_HOST }}/graphql"
+              value: "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ SALEOR_CORE_HOST }}/graphql/"
             - name: SALEOR_STOREFRONT_HOST
               value: "{{ SALEOR_STOREFRONT_HOST }}"
             - name: LMS_ROOT_URL
