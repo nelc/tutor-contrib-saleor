@@ -22,6 +22,10 @@ saleor-storefront:
   stdin_open: true
   tty: true
   restart: unless-stopped
+  environment:
+    API_URL: "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ SALEOR_CORE_HOST }}:{{ SALEOR_CORE_PORT }}/graphql/"
+    SALEOR_STOREFRONT_HOST: "{{ SALEOR_STOREFRONT_HOST }}"
+    LMS_ROOT_URL = "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ LMS_HOST }}:8000/"
 {% endif %}
 
 {% if RUN_SALEOR_CORE %}
@@ -42,7 +46,7 @@ saleor-core:
     HTTP_IP_FILTER_ALLOW_LOOPBACK_IPS: "True"
     HTTP_IP_FILTER_ENABLED: "False"
     CELERY_BROKER_URL: redis://{{ REDIS_HOST }}:{{ REDIS_PORT }}/{{ SALEOR_REDIS_DB }}
-    DATABASE_URL: postgres://{{ SALEOR_DB_USER }}:{{ SALEOR_DB_PASSWORD  }}@saleor-db/saleor
+    DATABASE_URL: postgres://{{ SALEOR_DB_USER }}:{{ SALEOR_DB_PASSWORD  }}@{{ SALEOR_DB_URL }}/saleor
     DEFAULT_FROM_EMAIL: noreply@example.com
     EMAIL_URL: smtp://mailpit:1025
     SECRET_KEY: changeme

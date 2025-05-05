@@ -25,6 +25,7 @@ hooks.Filters.CONFIG_DEFAULTS.add_items(
         ("SALEOR_DB_DOCKER_IMAGE", "library/postgres:15-alpine"),
         ("SALEOR_DB_PASSWORD", "saleor"),
         ("SALEOR_DB_PORT", "5432"),
+        ("SALEOR_DB_URL", "saleor-db"),
         ("SALEOR_DB_USER", "saleor"),
         ("SALEOR_CORE_HOST", "saleor-core.{{ LMS_HOST }}"),
         ("SALEOR_CORE_DOCKER_IMAGE", "ghcr.io/saleor/saleor:3.20"),

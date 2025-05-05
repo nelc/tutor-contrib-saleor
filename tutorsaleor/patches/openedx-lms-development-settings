@@ -1,0 +1,3 @@
+SALEOR_STOREFRONT_HOST = "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ SALEOR_STOREFRONT_HOST }}:{{ SALEOR_STOREFRONT_PORT }}/"
+SALEOR_API_URL = "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ SALEOR_CORE_HOST }}:{{ SALEOR_CORE_PORT }}/graphql/"
+CORS_ORIGIN_WHITELIST.append(SALEOR_STOREFRONT_HOST)
